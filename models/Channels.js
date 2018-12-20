@@ -34,7 +34,7 @@ ChannelSchema.statics.create = function(channel) {
 		description: channel.description,
 		tags: formattedTags,
 	}
-
+	
 	return new Promise((resolve, reject) => {
 		const newChannel = new this(channelData);
 		newChannel.save().then(channel => {
