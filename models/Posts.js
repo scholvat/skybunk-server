@@ -56,6 +56,10 @@ const PostSchema = new Schema({
       required: true,
     },
   }, { timestamps: true })],
+  poll: {
+    type: Schema.Types.ObjectId,
+    ref: 'Poll'
+  }
 }, { timestamps: true });
 
 PostSchema.statics.create = function (postData, author) {
@@ -387,4 +391,21 @@ PostSchema.methods.getImage = function() {
   return this.image.buffer.toString('base64');
 }
 
+PostSchema.statics.addPoll = function(postId, pollData){
+  postId = ObjectId(postId);
+
+  return new Promise((resolve, reject) => {
+    this.get(postId).then(post => {
+      const newPoll = new Poll(pollData)
+      newPoll.save().then(poll =>{
+        this.poll = poll;
+        this.save().then(post =>{
+          resolve(post.poll);
+        }).catch(err => {
+          reject(err);
+        });
+      });
+    });
+  });
+}
 mongoose.model('Post', PostSchema);
