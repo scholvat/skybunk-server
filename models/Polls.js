@@ -6,9 +6,6 @@ const _ = require('lodash');
 const { formatTags } = require('../helpers/formatters');
 const config = require('../config/options');
 
-require('./PostPicture');
-const PostPicture = mongoose.model('PostPicture');
-
 const LIMIT = 15;
 
 // Schema.Types vs mongoose.Types: https://github.com/Automattic/mongoose/issues/1671
@@ -19,9 +16,9 @@ const PollSchema = new Schema({
     votes: [{type: String}]
   }, { timestamps: true })],
   isMultiSelect: {
-    type: String,
+    type: Boolean,
     required: true,
-  }
+	}
 }, { timestamps: true });
 
 PollSchema.statics.create = function(poll) {

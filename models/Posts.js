@@ -8,6 +8,8 @@ const config = require('../config/options');
 
 require('./PostPicture');
 const PostPicture = mongoose.model('PostPicture');
+require('./Polls');
+const Poll = mongoose.model('Poll');
 
 const LIMIT = 15;
 
@@ -109,6 +111,7 @@ PostSchema.statics.get = function (id) {
         path: 'usersLiked',
         select: 'firstName lastName _id'
       }).populate('subscribedUsers')
+      .populate('poll')
       .then(post => {
         if (post) {
           resolve(post);
@@ -142,7 +145,8 @@ PostSchema.statics.getAllPaginated = function (page) {
       }).populate({
         path: 'usersLiked',
         select: 'firstName lastName _id'
-      }).then(posts => {
+      }).populate('poll')
+      .then(posts => {
         resolve(posts);
       })
       .catch(err => {
@@ -167,7 +171,8 @@ PostSchema.statics.getUserPosts = function (userId, page) {
       }).populate({
         path: 'usersLiked',
         select: 'firstName lastName _id'
-      }).then(posts => {
+      }).populate('poll')
+      .then(posts => {
         resolve(posts);
       })
       .catch(err => {
@@ -236,7 +241,8 @@ PostSchema.statics.findByTags = function (tags, page) {
       }).populate({
         path: 'usersLiked',
         select: 'firstName lastName _id'
-      }).then(posts => {
+      }).populate('poll')
+      .then(posts => {
         resolve(posts);
       })
       .catch(err => {
